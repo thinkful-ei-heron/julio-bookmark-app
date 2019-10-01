@@ -4,11 +4,30 @@
     <title>Julios Bookmarking Tool</title>
 </head>
 <body>
-    <header><h1>My Bookmarks</h1></header>
+    <header>
+        <h1>Bookmarker 9000</h1>
+    </header>
+    <main role='main'>
     <div class='buttons'>
-        <button class='new-input'>New</button>
-        <select class='filter-button'>Filter by</select>
-    </div>
-    <div class='results'></div>
+        
+        <section class="add-form" aria-live="polite">
+            <button class='new-input'>New</button>
+        </section>
+        
+        <section class="filter" aria-live="polite">
+            <select class='filter-button'>Filter by
+                <option value="1">1/5</option>
+                <option value="2">2/5</option>
+                <option value="3">3/5</option>
+                <option value="4">4/5</option>
+                <option value="5">5/5</option>
+            </select>
+        </section>
+        
+        <ul class="bookmarks" aria-live="polite">
+
+        </ul>
+    </main>
+
 </body>
 </html>
