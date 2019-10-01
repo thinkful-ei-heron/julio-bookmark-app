@@ -1,13 +1,14 @@
-'use strict';
 const base_URL = 'https://thinkful-list-api.herokuapp.com/julio';
 const headerContent = {'Content-Type': 'application/json'}
 
 function getURLs() {
+    console.log('this is running');
     return fetch(`${base_URL}/bookmarks`)
 }
 
 function createBookmark(title,url,descr,rate) {
-    let newBookmark = JSON.stringify({
+    console.log('this is running');
+    let newURL = JSON.stringify({
         title,
         url,
         descr,

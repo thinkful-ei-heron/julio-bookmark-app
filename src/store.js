@@ -1,43 +1,51 @@
-'use strict';
-const store = {
-    bookmarks: [
-       { 
-        id: cuid(),
-        title: 'Google',
-        rating: 3,
-        url: 'http://www.google.com',
-        description: 'lorem ipsum dolor sit',
-        expanded: false
-       }
-    ],
-    adding: false,
-    error: null,
-    filter: 0
-}
+const bookmarks = [
+    {
+          id: '7ddr',
+          title: 'Title 11',
+          rating: 5,
+          url: 'http://www.title11.com',
+          desc: 'lorem ipsum dolor',
+          expanded: false
+      }  
+  ];
+  const newURL = false;
+  const error = null;
+  const filter = 0;
+  
+  
+  
+  const addURL = function(newBookmark){
+    this.bookmarks.push(newBookmark);
+  }
+  
+  const findById = function(id){
+    return this.bookmarks.find(currentItem => currentItem.id === id);
+  }
+  
+  const findAndDelete = function(id){
+    this.bookmarks = this.bookmarks.filter(currentItem => currentItem.id !== id);
+  }
+  
+  const findAndUpdate = function(id, newData){
+    let currentItem = this.findById(id);
+    Object.assign(currentItem, newData);
+  }
 
-
-const findById = function (id) {
-  return this.items.find(currentItem => currentItem.id === id);
-};
-
-const addURL = function (name) {
-  this.items.push(name);
-};
-
-const findAndUpdateURL = function (id, newData) {
-  let updatedItem = this.findById(id);
-  Object.assign(updatedItem, newData);
-}
-
-
-const findAndDeleteURL = function (id) {
-  this.items = this.items.filter(currentItem => currentItem.id !== id);
-};
-
-export default {
-  store,
-  findById,
-  addURL,
-  findAndUpdateURL,
-  findAndDeleteURL,
-};
+  function filterFunction(rank) {
+      this.filterBy = rank ;
+  }
+  
+  
+  
+  
+  export default {
+    bookmarks,
+    newURL,
+    error,
+    filter,
+    addURL,
+    findById,
+    findAndDelete,
+    findAndUpdate,
+    filterFunction
+  }
