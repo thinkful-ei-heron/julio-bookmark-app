@@ -2,7 +2,7 @@ import $ from 'jquery';
 import api from './api'
 
 const htmlFormInput = `
-    <form class='form-url'>
+    <form id='form-url'>
         <fieldset>
             <div>
                 <label for="title-add">Insert Title</label>
@@ -29,13 +29,15 @@ const htmlFormInput = `
 $('.button-options').on('click','.add-form', e => {
     e.preventDefault();
     $('.form-input').html(htmlFormInput);
-})
-$('.form-url').submit('.submit-button', e => {
+});
+
+$('#form-url').submit('.submit-button', e => {
     e.preventDefault();
     let title = $('.title-add').val();
     let url = $('.url-add').val();
     let descr = $('.descr-add').val();
     let rate = $('.num-add').val();
     api.createBookmark(title,url,descr,rate);
-    console.log('this is running');
+    console.log('this is also running');
 })
+
