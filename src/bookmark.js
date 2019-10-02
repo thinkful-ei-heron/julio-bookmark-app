@@ -79,28 +79,29 @@ function handleNewItemSubmit() {
     $('.form-input').on('click', '#js-new-item-button', e => {
       adding = true;
       renderList();
-    });
+      makeNewBookmark();
+    }); 
   };
   
 
 
 function makeNewBookmark() {
-  $('#submit-form').submit(e => {
+    $('#submit-form').submit(e => {
     e.preventDefault();
     let formElement = $('#submit-form')[0];
     api.createBookmark(serializeJson(formElement))
-        .then(() => {
-            adding = false
-            renderList()
+        .then((url) => {
+            store.addURL(url);
+            adding = false;
+            renderList();
         });
   });
 };
 
 function handleItemDelete() {
     $('.bookmark-input').on('click','.delete-button', e => {
-        e.preventDefault();
+       // e.preventDefault();
         let itemDeleted = $('.delete-button').attr('id');
-        console.log(itemDeleted);
         api.deleteBookmark(itemDeleted)
             .then((item) => {
                 store.findAndDelete(itemDeleted);
@@ -113,21 +114,22 @@ function handleFilter() {
 
 };
 
-function handleItemDetails() {
+function handleExpand() {
 
 };
 
-function handleItemEdit() {
+function handleEdit() {
 
 };
 
 function bindEventListeners() {
   handleNewItemSubmit();
   handleItemDelete();
-  handleItemDetails();
+  handleExpand();
   handleFilter();
-  handleItemEdit();
+  handleEdit();
   handleCancel();
+  //makeNewBookmark();
 };
 
 export default {
