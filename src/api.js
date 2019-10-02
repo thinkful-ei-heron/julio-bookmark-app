@@ -18,7 +18,6 @@ const fetchApi = function(url, obj) {
         store.error = error.message;
         return Promise.reject(error);
       }
-      console.log(data);
       return data;
     });
 };
@@ -30,7 +29,6 @@ const fetchApi = function(url, obj) {
   
   function createBookmark(bookmark) {
     const body = bookmark;
-    console.log(body);
     return fetchApi(`${BASE_URL}/bookmarks`, {
       method: 'POST',
       headers: headerContent,

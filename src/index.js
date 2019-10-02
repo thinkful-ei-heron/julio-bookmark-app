@@ -4,8 +4,6 @@ import api from './api';
 import $ from '../node_modules/jquery';
 
 const main = function() {
-  
-
   api.getURLs()
     .then((items) => {
       items.forEach((item) => store.addURL(item));

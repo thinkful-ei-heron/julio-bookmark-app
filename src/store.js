@@ -24,9 +24,11 @@
     Object.assign(currentItem, newData);
   }
 
-//   function filterFunction(rank) {
-//       this.filterBy = rank ;
-//   }
+  function filterFunction(rank) {
+      console.log('this is running')
+      this.bookmarks.filter = rank;
+      bookmark.renderList();
+  }
   
   
   
@@ -39,6 +41,6 @@
     addURL,
     findById,
     findAndDelete,
-    findAndUpdate
-    // filterFunction
+    findAndUpdate,
+    filterFunction
   }
