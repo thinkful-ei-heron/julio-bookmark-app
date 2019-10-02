@@ -39,6 +39,8 @@ function generateListItem(item){
     <li id='${item.id}'><a href="${item.url}">${item.title}</a>
     <button id="${item.id}" class="delete-button">Delete</button>
     <button id="${item.id}" class="expand-button">Expand</button>
+    <p class='expandable hidden'><label>Description:</label> ${item.desc}</p>
+    <p class='expandable hidden'><label>Rating:</label> ${item.rating}</p>
     </li>
     `
 };
@@ -129,6 +131,7 @@ function handleExpand() {
         $(selectedListItem).after(`Description: ${itemDescr}  Rating: ${itemRate}`);
     })
 };
+
 function handleFilter() {
     $('.form-input').on('change','#js-filter-button',e => {
         store.filterFunction(e.currentTarget.value);

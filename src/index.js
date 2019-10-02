@@ -2,6 +2,7 @@ import bookmark from './bookmark';
 import store from './store';
 import api from './api';
 import $ from '../node_modules/jquery';
+import './index.css'
 
 const main = function() {
   api.getURLs()
