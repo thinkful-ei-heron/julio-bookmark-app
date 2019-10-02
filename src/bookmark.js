@@ -6,7 +6,7 @@ const firstPage = `
 <div class="submit-buttons">
   <button class="add-button" id="js-new-item-button" type="submit">New</button>
 <form>
-  <select class="filter-button" id="js-filter-button" type="submit">
+  <select class="filter-button" id="js-filter-button">
     <option value='0'>Min Rating</option>
     <option value='1'>☆</option>
     <option value='2'>☆☆</option>
@@ -38,11 +38,12 @@ const addItemHtml =
   let adding = store.addURL;
 
 function generateListItem(item){
-  $('.bookmark-input').append(`
-    <li id='${item[0]}'><a href="${item[2]}">${item[1]}</a></li>
-    <button id="${item[0]}" class="delete-button">Delete</button>
-    <button id="${item[0]}" class="expand-button">Expand</button>
-    `);
+    return `
+    <li id='${item.title}'><a href="${item.url}">${item.title}</a>
+    <button id="${item.title}" class="delete-button">Delete</button>
+    <button id="${item.title}" class="expand-button">Expand</button>
+    </li>
+    `
 };
 
 function generateList(list) {
@@ -51,19 +52,23 @@ function generateList(list) {
 };
 
 function renderList() {
-  $('.bookmark-input').empty();
-  let localItems = store.bookmarks.forEach(list => generateList(list));
-  if(adding === true) {
+    console.log(store.filter);
+    $('.bookmark-input').empty();
+    let localItems = store.bookmarks.map(list => generateList(list));
+    if(store.filter !== 0) {
+        let filteredItems = store.bookmarks.filter((bkm) => bkm.rating >= store.filter);
+        localItems = filteredItems.map((item) => generateListItem(item));
+        console.log(localItems);
+    } else if(adding === true) {
     $('.form-input').empty();
     $('.bookmark-input').empty();
     $('.form-input').html(addItemHtml);
     $('.bookmark-input').html(localItems);
     adding = false;
-  }
-  else {
+    } else {
     $('.form-input').html(firstPage);
-    $('.bookmark-input').html(localItems);
   }
+    $('.bookmark-input').html(localItems);
 };
 
 function serializeJson(form) {
@@ -117,7 +122,6 @@ function handleExpand() {
     $('.bookmark-input').on('click','.expand-button', e => {
         e.preventDefault();
         let id = $('.expand-button').attr('id');
-        console.log(id);
         let storeObj = store.bookmarks
         function search(id,storeObj) {
             for(let i=0;i<storeObj.length;i++) {
@@ -126,19 +130,14 @@ function handleExpand() {
                 }
             }
         }
-        let itemDesc = search(id,storeObj).desc;
-        let itemRate = search(id,storeObj).rating
         let selectedListItem = document.getElementById(id);
-        $(selectedListItem).after(itemDesc,itemRate);
+        $(selectedListItem).after(search(id,storeObj).desc,search(id,storeObj).rating);
     })
 };
 
 function handleFilter() {
-    console.log('handleFilter running');
-    $('.submit-buttons').on('change','filter-button',e => {
-        console.log('this is also running');
-        e.preventDefault();
-        store.filterFunction(this.value);
+    $('.form-input').on('change','#js-filter-button',e => {
+        store.filterFunction(e.currentTarget.value);
     })
 };
 

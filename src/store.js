@@ -1,9 +1,9 @@
   import bookmark from './bookmark';
   
   const bookmarks = [];
-  const newURL = false;
-  const error = null;
-  const filter = 0;
+  let newURL = false;
+  let error = null;
+  let filter = 0;
   
   
   const addURL = function(newBookmark){
@@ -25,8 +25,7 @@
   }
 
   function filterFunction(rank) {
-      console.log('this is running')
-      this.bookmarks.filter = rank;
+      this.filter = rank;
       bookmark.renderList();
   }
   
