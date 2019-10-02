@@ -25,11 +25,11 @@ const addItemHtml =
   </textarea></div>
   <div><select id="rating" type="submit" name="rating">
     <option>Choose a Rating</option>
-    <option>☆</option>
-    <option>☆☆</option>
-    <option>☆☆☆</option>
-    <option>☆☆☆☆</option>
-    <option>☆☆☆☆☆</option>
+    <option value='5'>☆☆☆☆☆</option>
+    <option value='4'>☆☆☆☆</option>
+    <option value='3'>☆☆☆</option>
+    <option value='2'>☆☆</option>
+    <option value='1'>☆</option>
   </select></div>
   <button type="submit" for="submit-form">Submit</button>
 </form>
@@ -79,7 +79,6 @@ function handleNewItemSubmit() {
     $('.form-input').on('click', '#js-new-item-button', e => {
       adding = true;
       renderList();
-      makeNewBookmark();
     });
   };
   
@@ -89,20 +88,22 @@ function makeNewBookmark() {
   $('#submit-form').submit(e => {
     e.preventDefault();
     let formElement = $('#submit-form')[0];
-    api.createBookmark(serializeJson(formElement));
-    adding = false;
-    renderList();
+    api.createBookmark(serializeJson(formElement))
+        .then(() => {
+            adding = false
+            renderList()
+        });
   });
 };
 
 function handleItemDelete() {
     $('.bookmark-input').on('click','.delete-button', e => {
-        //e.preventDefault();
+        e.preventDefault();
         let itemDeleted = $('.delete-button').attr('id');
         console.log(itemDeleted);
         api.deleteBookmark(itemDeleted)
             .then((item) => {
-                store.findAndDelete(item);
+                store.findAndDelete(itemDeleted);
                 renderList();
             });
     })
