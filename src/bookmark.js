@@ -1,7 +1,6 @@
 import store from './store';
 import api from './api';
 import $ from '../node_modules/jquery';
-
 const firstPage = `
 <div class="submit-buttons">
   <button class="add-button" id="js-new-item-button" type="submit">New</button>
@@ -34,18 +33,15 @@ const addItemHtml =
   <button type="submit" for="submit-form">Submit</button>
 </form>
   <button id="cancel-button">Cancel</button>`;
-
-  let adding = store.addURL;
-
+let adding = store.addURL;
 function generateListItem(item){
     return `
-    <li id='${item.title}'><a href="${item.url}">${item.title}</a>
-    <button id="${item.title}" class="delete-button">Delete</button>
-    <button id="${item.title}" class="expand-button">Expand</button>
+    <li id='${item.id}'><a href="${item.url}">${item.title}</a>
+    <button id="${item.id}" class="delete-button">Delete</button>
+    <button id="${item.id}" class="expand-button">Expand</button>
     </li>
     `
 };
-
 function generateList(list) {
   let entries = Object.values(list);
   generateListItem(entries);
@@ -91,9 +87,6 @@ function handleNewItemSubmit() {
       makeNewBookmark();
     }); 
   };
-  
-
-
 function makeNewBookmark() {
     $('#submit-form').submit(e => {
     e.preventDefault();
@@ -106,10 +99,11 @@ function makeNewBookmark() {
         });
   });
 };
-
 function handleItemDelete() {
     $('.bookmark-input').on('click','.delete-button', e => {
+       console.log('handleItemDelete is running');
         let itemDeleted = $('.delete-button').attr('id');
+        console.log(itemDeleted);
         api.deleteBookmark(itemDeleted)
             .then((item) => {
                 store.findAndDelete(itemDeleted);
@@ -117,12 +111,11 @@ function handleItemDelete() {
             });
     })
 };
-
 function handleExpand() {
-    $('.bookmark-input').on('click','.expand-button', e => {
+    $('.bookmark-input').on('click', e => {
         e.preventDefault();
         let id = $('.expand-button').attr('id');
-        let storeObj = store.bookmarks
+        let storeObj = store.bookmarks;
         function search(id,storeObj) {
             for(let i=0;i<storeObj.length;i++) {
                 if(storeObj[i].id === id) {
@@ -131,16 +124,16 @@ function handleExpand() {
             }
         }
         let selectedListItem = document.getElementById(id);
-        $(selectedListItem).after(search(id,storeObj).desc,search(id,storeObj).rating);
+        let itemDescr = search(id,storeObj).desc;
+        let itemRate = search(id,storeObj).rating;
+        $(selectedListItem).after(`Description: ${itemDescr}  Rating: ${itemRate}`);
     })
 };
-
 function handleFilter() {
     $('.form-input').on('change','#js-filter-button',e => {
         store.filterFunction(e.currentTarget.value);
     })
 };
-
 function bindEventListeners() {
   handleNewItemSubmit();
   handleItemDelete();
@@ -148,7 +141,6 @@ function bindEventListeners() {
   handleFilter();
   handleCancel();
 };
-
 export default {
   renderList,
   bindEventListeners
