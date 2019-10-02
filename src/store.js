@@ -1,13 +1,6 @@
-const bookmarks = [
-    {
-          id: '123',
-          title: 'google',
-          rating: 5,
-          url: 'http://www.google.com',
-          desc: 'this is google',
-          expanded: false
-      }  
-  ];
+  import bookmark from './bookmark';
+  
+  const bookmarks = [];
   const newURL = false;
   const error = null;
   const filter = 0;
@@ -15,6 +8,7 @@ const bookmarks = [
   
   const addURL = function(newBookmark){
     this.bookmarks.push(newBookmark);
+    bookmark.renderList();
   }
   
   const findById = function(id){
@@ -30,9 +24,9 @@ const bookmarks = [
     Object.assign(currentItem, newData);
   }
 
-  function filterFunction(rank) {
-      this.filterBy = rank ;
-  }
+//   function filterFunction(rank) {
+//       this.filterBy = rank ;
+//   }
   
   
   
@@ -45,6 +39,6 @@ const bookmarks = [
     addURL,
     findById,
     findAndDelete,
-    findAndUpdate,
-    filterFunction
+    findAndUpdate
+    // filterFunction
   }

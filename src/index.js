@@ -1,17 +1,18 @@
-import $ from 'jquery'
-import './index.css'
-import store from './store'
-import bookmark from './bookmark'
-import api from './api'
+import bookmark from './bookmark';
+import store from './store';
+import api from './api';
+import $ from '../node_modules/jquery';
 
-const main = function(){
-    api.getURLs()
-        .then((bookmarks) => {
-            bookmarks.forEach((bookmark) => store.addURL(bookmark));
-            bookmark.render();
+const main = function() {
+  
 
-    })
-    .catch(err => console.log(err.message));
-}
+  api.getURLs()
+    .then((items) => {
+      items.forEach((item) => store.addURL(item));
+      bookmark.renderList();
+    });
+  bookmark.bindEventListeners();
+  bookmark.renderList();
+};
 
-$(main)
+$(main);

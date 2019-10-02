@@ -1,43 +1,135 @@
-import $ from 'jquery';
-import api from './api'
+import store from './store';
+import api from './api';
+import $ from '../node_modules/jquery';
 
-const htmlFormInput = `
-    <form id='form-url'>
-        <fieldset>
-            <div>
-                <label for="title-add">Insert Title</label>
-                <input type='text' class='title-add' name='title-add' required>
-            </div>
-            <div>
-                <label for="url-add">Insert URL</label>
-                <input type='url' class='url-add' name='url-add' required>
-            </div>
-            <div>
-                <label for="descr-add">Short Description</label>
-                <input type='text' class='descr-add' name='descr-add' required>
-            </div>
-            <div>
-                <label for="num-add"></label>
-                <input type='number' class='num-add' name='num-add' placeholder='1-5' required>
-            </div>
-            <div>
-                <button type='submit' class='submit-button'>Add Bookmark</button>
-            </div>
-        </fieldset>
-    </form>
-`;
-$('.button-options').on('click','.add-form', e => {
+const firstPage = `
+<div class="submit-buttons">
+  <button class="landing-button" id="js-new-item-button" type="submit">New</button>
+<form>
+  <select class="landing-button" id="js-filter-button" type="submit" name="Filter">
+    <option value='0'>Min Rating</option>
+    <option value='1'>☆</option>
+    <option value='2'>☆☆</option>
+    <option value='3'>☆☆☆</option>
+    <option value='4'>☆☆☆☆</option>
+    <option value='5'>☆☆☆☆☆</option>
+  </select>
+</form>
+</div>`;
+const addItemHtml =
+`<form id="submit-form">
+  <input type="text" name="title" placeholder="Input Title" required>
+  <div><input type="url" name="url" placeholder="Input URL" required></div>
+  <label for="desc">Add Description</label>
+  <div><textarea name="desc">
+  </textarea></div>
+  <div><select id="rating" type="submit" name="rating">
+    <option>Choose a Rating</option>
+    <option>☆</option>
+    <option>☆☆</option>
+    <option>☆☆☆</option>
+    <option>☆☆☆☆</option>
+    <option>☆☆☆☆☆</option>
+  </select></div>
+  <button type="submit" for="submit-form">Submit</button>
+</form>
+  <button id="cancel-button">CANCEL</button>`;
+
+  let adding = store.addURL;
+
+function generateListItem(item){
+  $('.bookmark-input').append(`<li ><a href="${item[2]}">${item[1]}</a><button id="${item[0]}" class="delete-button">Delete</button>`);
+};
+
+function generateList(list) {
+  let entries = Object.values(list);
+  generateListItem(entries);
+};
+
+function renderList() {
+  $('.bookmark-input').empty();
+  let localItems = store.bookmarks.forEach(list => generateList(list));
+  if(adding === true) {
+    $('.form-input').empty();
+    $('.bookmark-input').empty();
+    $('.form-input').html(addItemHtml);
+    $('.bookmark-input').html(localItems);
+    adding = false;
+  }
+  else {
+    $('.form-input').html(firstPage);
+    $('.bookmark-input').html(localItems);
+  }
+};
+
+function serializeJson(form) {
+  const formData = new FormData(form);
+  const o = {};
+  formData.forEach((val, name) => o[name] = val);
+  return JSON.stringify(o);
+}
+
+function handleCancel() {
+  $('.form-input').on('click', '#cancel-button', (e) => {
+    renderList();
+  });
+};
+
+function handleNewItemSubmit() {
+    $('.form-input').on('click', '#js-new-item-button', e => {
+      adding = true;
+      renderList();
+      makeNewBookmark();
+    });
+  };
+  
+
+
+function makeNewBookmark() {
+  $('#submit-form').submit(e => {
     e.preventDefault();
-    $('.form-input').html(htmlFormInput);
-});
+    let formElement = $('#submit-form')[0];
+    api.createBookmark(serializeJson(formElement));
+    adding = false;
+    renderList();
+  });
+};
 
-$('#form-url').submit('.submit-button', e => {
-    e.preventDefault();
-    let title = $('.title-add').val();
-    let url = $('.url-add').val();
-    let descr = $('.descr-add').val();
-    let rate = $('.num-add').val();
-    api.createBookmark(title,url,descr,rate);
-    console.log('this is also running');
-})
+function handleItemDelete() {
+    $('.bookmark-input').on('click','.delete-button', e => {
+        //e.preventDefault();
+        let itemDeleted = $('.delete-button').attr('id');
+        console.log(itemDeleted);
+        api.deleteBookmark(itemDeleted)
+            .then((item) => {
+                store.findAndDelete(item);
+                renderList();
+            });
+    })
+};
 
+function handleFilter() {
+
+};
+
+function handleItemDetails() {
+
+};
+
+function handleItemEdit() {
+
+};
+
+function bindEventListeners() {
+  handleNewItemSubmit();
+  handleItemDelete();
+  handleItemDetails();
+  handleFilter();
+  handleItemEdit();
+  handleCancel();
+};
+
+export default {
+  renderList,
+  bindEventListeners
+};
