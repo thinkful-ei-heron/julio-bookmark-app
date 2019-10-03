@@ -36,13 +36,16 @@ const addItemHtml =
 let adding = store.addURL;
 function generateListItem(item){
     return `
-    <li id='${item.id}'><a href="${item.url}">${item.title}</a>
-    <button id="${item.id}" class="delete-button">Delete</button>
-    <button id="${item.id}" class="expand-button">Expand</button>
-    <p class='expandable hidden'><label>Description:</label> ${item.desc}</p>
-    <p class='expandable hidden'><label>Rating:</label> ${item.rating}</p>
-    </li>
-    `
+      <li id='${item.id}'>
+        <a href="${item.url}">${item.title}</a>
+        <button id="${item.id}" class="delete-button">Delete</button>
+        <button id="${item.id}" class="expand-button">Expand</button>
+        <div class="hidden expandable">
+          <p><label>Description</label>: ${item.desc}</p>
+          <label>Rating:</label>${item.rating}
+        </div>
+      </li>
+      `;
 };
 function generateList(list) {
   let entries = Object.values(list);
@@ -112,18 +115,20 @@ function handleExpand() {
         $(target).closest('li').find('.expandable').toggleClass('hidden');
     })
 };
+
 function updateFilterFromDropdown(){
-  let $dropdown = $('#js-filter-button').val();
-  let value = $dropdown || 0;
-  console.log($dropdown);
+  let $dropdown = $('#js-filter-button');
+  let value = $dropdown.val() || 0;
   store.filterFunction(value);
 }
+
 function handleFilter() {
     $('.form-input').on('change', '#js-filter-button', e => {
       e.preventDefault(); 
-      updateFilterFromDropdown();
+      renderList();
     });
 };
+
 function bindEventListeners() {
   handleNewItemSubmit();
   handleItemDelete();

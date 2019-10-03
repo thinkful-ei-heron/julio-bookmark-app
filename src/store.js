@@ -1,4 +1,4 @@
-  import bookmark from './bookmark';
+  //import bookmark from './bookmark';
   
   const bookmarks = [];
   let newURL = false;
@@ -8,7 +8,6 @@
   
   const addURL = function(newBookmark){
     this.bookmarks.push(newBookmark);
-    bookmark.renderList();
   }
   
   const findById = function(id){
@@ -26,7 +25,6 @@
 
   function filterFunction(rank) {
       this.filter = rank;
-      bookmark.renderList();
   }
   
   
