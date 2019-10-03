@@ -23,7 +23,7 @@ const addItemHtml =
   <div><textarea name="desc">
   </textarea></div>
   <div><select id="rating" type="submit" name="rating">
-    <option>Choose a Rating</option>
+    <option value='0'>Choose a Rating</option>
     <option value='5'>☆☆☆☆☆</option>
     <option value='4'>☆☆☆☆</option>
     <option value='3'>☆☆☆</option>
@@ -48,7 +48,6 @@ function generateList(list) {
   let entries = Object.values(list);
   generateListItem(entries);
 };
-
 function renderList() {
     console.log(store.filter);
     $('.bookmark-input').empty();
@@ -56,7 +55,6 @@ function renderList() {
     if(store.filter !== 0) {
         let filteredItems = store.bookmarks.filter((bkm) => bkm.rating >= store.filter);
         localItems = filteredItems.map((item) => generateListItem(item));
-        console.log(localItems);
     } else if(adding === true) {
     $('.form-input').empty();
     $('.bookmark-input').empty();
@@ -67,21 +65,19 @@ function renderList() {
     $('.form-input').html(firstPage);
   }
     $('.bookmark-input').html(localItems);
+    updateFilterFromDropdown();
 };
-
 function serializeJson(form) {
   const formData = new FormData(form);
   const o = {};
   formData.forEach((val, name) => o[name] = val);
   return JSON.stringify(o);
 }
-
 function handleCancel() {
   $('.form-input').on('click', '#cancel-button', (e) => {
     renderList();
   });
 };
-
 function handleNewItemSubmit() {
     $('.form-input').on('click', '#js-new-item-button', e => {
       adding = true;
@@ -114,33 +110,29 @@ function handleItemDelete() {
     })
 };
 function handleExpand() {
-    $('.bookmark-input').on('click', e => {
+    $('.bookmark-input').on('click', '.expand-button', e => {
         e.preventDefault();
-        let id = $('.expand-button').attr('id');
-        let storeObj = store.bookmarks;
-        function search(id,storeObj) {
-            for(let i=0;i<storeObj.length;i++) {
-                if(storeObj[i].id === id) {
-                    return storeObj[i];
-                }
-            }
-        }
-        let selectedListItem = document.getElementById(id);
-        let itemDescr = search(id,storeObj).desc;
-        let itemRate = search(id,storeObj).rating;
-        $(selectedListItem).after(`Description: ${itemDescr}  Rating: ${itemRate}`);
+        let target = e.currentTarget;
+        $(target).closest('li').find('.expandable').toggleClass('hidden');
     })
 };
-
+function updateFilterFromDropdown(){
+  let $dropdown = $('#js-filter-button');
+  let value = $dropdown.val() || 0;
+  console.log('filtering on value:', value);
+  store.filterFunction(value);
+}
 function handleFilter() {
-    $('.form-input').on('change','#js-filter-button',e => {
-        store.filterFunction(e.currentTarget.value);
-    })
+    $('.form-input').on('change', '#js-filter-button', e => {
+      e.preventDefault(); 
+      updateFilterFromDropdown();
+    });
 };
 function bindEventListeners() {
   handleNewItemSubmit();
   handleItemDelete();
   handleExpand();
+  updateFilterFromDropdown();
   handleFilter();
   handleCancel();
 };
