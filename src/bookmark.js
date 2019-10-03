@@ -31,8 +31,8 @@ const addItemHtml =
     <option value='1'>☆</option>
   </select></div>
   <button type="submit" for="submit-form">Submit</button>
-</form>
-  <button id="cancel-button">Cancel</button>`;
+  <button id="cancel-button">Cancel</button>
+</form>`;
 let adding = store.addURL;
 function generateListItem(item){
     return `
@@ -49,7 +49,6 @@ function generateList(list) {
   generateListItem(entries);
 };
 function renderList() {
-    console.log(store.filter);
     $('.bookmark-input').empty();
     let localItems = store.bookmarks.map(list => generateList(list));
     if(store.filter !== 0) {
@@ -65,7 +64,6 @@ function renderList() {
     $('.form-input').html(firstPage);
   }
     $('.bookmark-input').html(localItems);
-    updateFilterFromDropdown();
 };
 function serializeJson(form) {
   const formData = new FormData(form);
@@ -82,8 +80,8 @@ function handleNewItemSubmit() {
     $('.form-input').on('click', '#js-new-item-button', e => {
       adding = true;
       renderList();
-      makeNewBookmark();
-    }); 
+    });
+    makeNewBookmark(); 
   };
 function makeNewBookmark() {
     $('#submit-form').submit(e => {
@@ -99,9 +97,7 @@ function makeNewBookmark() {
 };
 function handleItemDelete() {
     $('.bookmark-input').on('click','.delete-button', e => {
-       console.log('handleItemDelete is running');
         let itemDeleted = $('.delete-button').attr('id');
-        console.log(itemDeleted);
         api.deleteBookmark(itemDeleted)
             .then((item) => {
                 store.findAndDelete(itemDeleted);
@@ -117,9 +113,9 @@ function handleExpand() {
     })
 };
 function updateFilterFromDropdown(){
-  let $dropdown = $('#js-filter-button');
-  let value = $dropdown.val() || 0;
-  console.log('filtering on value:', value);
+  let $dropdown = $('#js-filter-button').val();
+  let value = $dropdown || 0;
+  console.log($dropdown);
   store.filterFunction(value);
 }
 function handleFilter() {
