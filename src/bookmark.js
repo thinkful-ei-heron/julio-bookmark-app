@@ -23,7 +23,7 @@ const addItemHtml =
   <div><textarea name="desc">
   </textarea></div>
   <div><select id="rating" type="submit" name="rating">
-    <option>Choose a Rating</option>
+    <option value='0'>Choose a Rating</option>
     <option value='5'>☆☆☆☆☆</option>
     <option value='4'>☆☆☆☆</option>
     <option value='3'>☆☆☆</option>
@@ -39,8 +39,12 @@ function generateListItem(item){
     <li id='${item.id}'><a href="${item.url}">${item.title}</a>
     <button id="${item.id}" class="delete-button">Delete</button>
     <button id="${item.id}" class="expand-button">Expand</button>
-    </li>
-    `
+    <div class="hidden expandable">
+      <p><label>Description</label>: ${item.desc}</p>
+      <label>Rating</label>${item.rating}
+    </div>
+      </li>
+      `
 };
 function generateList(list) {
   let entries = Object.values(list);
@@ -65,6 +69,7 @@ function renderList() {
     $('.form-input').html(firstPage);
   }
     $('.bookmark-input').html(localItems);
+    updateFilterFromDropdown();
 };
 
 function serializeJson(form) {
@@ -112,32 +117,32 @@ function handleItemDelete() {
     })
 };
 function handleExpand() {
-    $('.bookmark-input').on('click', e => {
+    $('.bookmark-input').on('click', '.expand-button', e => {
         e.preventDefault();
-        let id = $('.expand-button').attr('id');
-        let storeObj = store.bookmarks;
-        function search(id,storeObj) {
-            for(let i=0;i<storeObj.length;i++) {
-                if(storeObj[i].id === id) {
-                    return storeObj[i];
-                }
-            }
-        }
-        let selectedListItem = document.getElementById(id);
-        let itemDescr = search(id,storeObj).desc;
-        let itemRate = search(id,storeObj).rating;
-        $(selectedListItem).after(`Description: ${itemDescr}  Rating: ${itemRate}`);
+        let target = e.currentTarget;
+        $(target).closest('li').find('.expandable').toggleClass('hidden');
     })
 };
+
+function updateFilterFromDropdown(){
+  let $dropdown = $('#js-filter-button');
+  let value = $dropdown.val() || 0;
+  console.log('filtering on value:', value);
+  store.filterFunction(value);
+}
+
 function handleFilter() {
-    $('.form-input').on('change','#js-filter-button',e => {
-        store.filterFunction(e.currentTarget.value);
-    })
+    $('.form-input').on('change', '#js-filter-button', e => {
+      e.preventDefault(); 
+      updateFilterFromDropdown();
+    });
 };
+
 function bindEventListeners() {
   handleNewItemSubmit();
   handleItemDelete();
   handleExpand();
+  updateFilterFromDropdown();
   handleFilter();
   handleCancel();
 };
