@@ -52,22 +52,22 @@ function generateList(list) {
   generateListItem(entries);
 };
 function renderList() {
-    $('.bookmark-input').empty();
-    let localItems = store.bookmarks.map(list => generateList(list));
-    if(store.filter !== 0) {
-        let filteredItems = store.bookmarks.filter((bkm) => bkm.rating >= store.filter);
-        localItems = filteredItems.map((item) => generateListItem(item));
-    } else if(adding === true) {
-    $('.form-input').empty();
-    $('.bookmark-input').empty();
-    $('.form-input').html(addItemHtml);
-    $('.bookmark-input').html(localItems);
-    adding = false;
-    } else {
-    $('.form-input').html(firstPage);
-  }
-    $('.bookmark-input').html(localItems);
-};
+  let localItems = store.bookmarks.map(list => generateList(list));
+  if(store.filter == 0) {
+      let filteredItems = store.bookmarks.filter((bkm) => bkm.rating >= store.filter);
+      localItems = filteredItems.map((item) => generateListItem(item));
+      $('.form-input').html(firstPage);
+  } else if(store.filter !== 0) {
+      let filteredItems = store.bookmarks.filter((bkm) => bkm.rating >= store.filter);
+      localItems = filteredItems.map((item) => generateListItem(item));
+  adding = false;
+  } else {
+  $('.form-input').html(firstPage);
+}
+  $('.bookmark-input').html(localItems);
+}; 
+
+
 function serializeJson(form) {
   const formData = new FormData(form);
   const o = {};
@@ -81,6 +81,7 @@ function handleCancel() {
 };
 function handleNewItemSubmit() {
     $('.form-input').on('click', '#js-new-item-button', e => {
+      console.log('i run');
       adding = true;
       renderList();
     });
@@ -123,8 +124,9 @@ function updateFilterFromDropdown(){
 }
 
 function handleFilter() {
-    $('.form-input').on('change', '#js-filter-button', e => {
+    $('#submit-form').change('#rating',e => {
       e.preventDefault(); 
+      console.log(e.currentTarget);
       renderList();
     });
 };
@@ -133,7 +135,7 @@ function bindEventListeners() {
   handleNewItemSubmit();
   handleItemDelete();
   handleExpand();
-  updateFilterFromDropdown();
+  //updateFilterFromDropdown();
   handleFilter();
   handleCancel();
 };
