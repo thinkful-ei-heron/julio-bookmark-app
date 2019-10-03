@@ -31,8 +31,8 @@ const addItemHtml =
     <option value='1'>☆</option>
   </select></div>
   <button type="submit" for="submit-form">Submit</button>
-</form>
-  <button id="cancel-button">Cancel</button>`;
+  <button id="cancel-button">Cancel</button>
+</form>`;
 let adding = store.addURL;
 function generateListItem(item){
     return `
@@ -51,15 +51,12 @@ function generateList(list) {
   let entries = Object.values(list);
   generateListItem(entries);
 };
-
 function renderList() {
-    console.log(store.filter);
     $('.bookmark-input').empty();
     let localItems = store.bookmarks.map(list => generateList(list));
     if(store.filter !== 0) {
         let filteredItems = store.bookmarks.filter((bkm) => bkm.rating >= store.filter);
         localItems = filteredItems.map((item) => generateListItem(item));
-        console.log(localItems);
     } else if(adding === true) {
     $('.form-input').empty();
     $('.bookmark-input').empty();
@@ -73,26 +70,23 @@ function renderList() {
     updateFilterFromDropdown();
 
 };
-
 function serializeJson(form) {
   const formData = new FormData(form);
   const o = {};
   formData.forEach((val, name) => o[name] = val);
   return JSON.stringify(o);
 }
-
 function handleCancel() {
   $('.form-input').on('click', '#cancel-button', (e) => {
     renderList();
   });
 };
-
 function handleNewItemSubmit() {
     $('.form-input').on('click', '#js-new-item-button', e => {
       adding = true;
       renderList();
-      makeNewBookmark();
-    }); 
+    });
+    makeNewBookmark(); 
   };
 function makeNewBookmark() {
     $('#submit-form').submit(e => {
@@ -108,9 +102,7 @@ function makeNewBookmark() {
 };
 function handleItemDelete() {
     $('.bookmark-input').on('click','.delete-button', e => {
-       console.log('handleItemDelete is running');
         let itemDeleted = $('.delete-button').attr('id');
-        console.log(itemDeleted);
         api.deleteBookmark(itemDeleted)
             .then((item) => {
                 store.findAndDelete(itemDeleted);
@@ -144,6 +136,7 @@ function bindEventListeners() {
   handleNewItemSubmit();
   handleItemDelete();
   handleExpand();
+  updateFilterFromDropdown();
   handleFilter();
   handleCancel();
 };
