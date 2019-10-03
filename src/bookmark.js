@@ -42,7 +42,7 @@ function generateListItem(item){
         <button id="${item.id}" class="expand-button">Expand</button>
         <div class="hidden expandable">
           <p><label>Description</label>: ${item.desc}</p>
-          <label>Rating</label>${item.rating}
+          <label>Rating:</label>${item.rating}
         </div>
       </li>
       `;
@@ -71,6 +71,7 @@ function renderList() {
   }
     $('.bookmark-input').html(localItems);
     updateFilterFromDropdown();
+
 };
 
 function serializeJson(form) {
@@ -135,7 +136,7 @@ function updateFilterFromDropdown(){
 function handleFilter() {
     $('.form-input').on('change', '#js-filter-button', e => {
       e.preventDefault(); 
-      updateFilterFromDropdown();
+      renderList();
     });
 };
 
@@ -143,7 +144,6 @@ function bindEventListeners() {
   handleNewItemSubmit();
   handleItemDelete();
   handleExpand();
-  updateFilterFromDropdown();
   handleFilter();
   handleCancel();
 };
