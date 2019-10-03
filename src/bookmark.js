@@ -36,22 +36,16 @@ const addItemHtml =
 let adding = store.addURL;
 function generateListItem(item){
     return `
-    <li id='${item.id}'><a href="${item.url}">${item.title}</a>
-    <button id="${item.id}" class="delete-button">Delete</button>
-    <button id="${item.id}" class="expand-button">Expand</button>
-<<<<<<< HEAD
-    <div class="hidden expandable">
-      <p><label>Description</label>: ${item.desc}</p>
-      <label>Rating</label>${item.rating}
-    </div>
+      <li id='${item.id}'>
+        <a href="${item.url}">${item.title}</a>
+        <button id="${item.id}" class="delete-button">Delete</button>
+        <button id="${item.id}" class="expand-button">Expand</button>
+        <div class="hidden expandable">
+          <p><label>Description</label>: ${item.desc}</p>
+          <label>Rating</label>${item.rating}
+        </div>
       </li>
-      `
-=======
-    <p class='expandable hidden'><label>Description:</label> ${item.desc}</p>
-    <p class='expandable hidden'><label>Rating:</label> ${item.rating}</p>
-    </li>
-    `
->>>>>>> cb22dac106dcc6fd78c80b6c7d182f96e53fa2c9
+      `;
 };
 function generateList(list) {
   let entries = Object.values(list);
